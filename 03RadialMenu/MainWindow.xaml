@@ -1,0 +1,256 @@
+﻿<Window x:Class="_03RadialMenu.MainWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+                xmlns:local="clr-namespace:_03RadialMenu"
+                Title="MainWindow" Height="600" Width="735">
+    <Window.Resources>
+        <SolidColorBrush x:Key="RadialMenuNavigationButtonBackgroundBrush" Color="#FFD5AC71" />
+        <SolidColorBrush x:Key="MenuItemBackground" Color="#4b3022" />
+
+        <Style TargetType="telerik:VisualStatesItemPresenter">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+
+        <Style TargetType="Rectangle" x:Key="NavigationMenuStyle">
+            <Setter Property="Fill" Value="Transparent" />
+            <Setter Property="StrokeThickness" Value="0" />
+        </Style>
+
+        <Style TargetType="Rectangle" x:Key="ContentMenuStyle">
+            <Setter Property="Fill" Value="Transparent" />
+            <Setter Property="StrokeThickness" Value="0" />
+        </Style>
+
+        <Style TargetType="telerik:RadRadialMenu" >
+            <Setter Property="NavigationMenuBackgroundStyle" Value="{StaticResource NavigationMenuStyle}" />
+            <Setter Property="ContentMenuBackgroundStyle" Value="{StaticResource ContentMenuStyle}" />
+        </Style>
+
+        <Style TargetType="telerik:RadialMenuButton">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Path Fill="White" Width="15" Height="15"
+                            Data="M8.4,2C6.5,2 4.9,3.5 4.9,5.5C4.9,7.4 6.5,9 8.4,9C10.4,9 11.9,7.4 11.9,5.5C11.9,3.5 10.4,2 8.4,2zM8.4,0C11.5,-8.7e-008 13.9,2.4 13.9,5.5C13.9,8.5 11.5,11 8.4,11C7.3,11 6.2,10.6 5.4,10.0L5.3,10.0L1.4,13.9L0,12.5L3.9,8.6L3.9,8.5C3.3,7.6 2.9,6.6 2.9,5.5C2.9,2.4 5.4,-8.7e-008 8.4,0z"
+                            Stretch="Fill" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="telerik:RadialMenuButton">
+                        <Grid x:Name="RootGrid">
+                            <Grid>
+                                <Ellipse x:Name="BackgroundGlyph"
+                                    Fill="#4b3022" StrokeThickness="2"
+                                    Stroke="White"
+                                    RenderTransformOrigin=".5,.5"
+                                    Width="{TemplateBinding Width}"
+                                    Height="{TemplateBinding Height}">
+                                    <Ellipse.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            <RotateTransform Angle="0" />
+                                        </TransformGroup>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                                <ContentPresenter x:Name="NormalGlyph"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Margin="0 -1 0 0">
+                                    <ContentPresenter.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            <RotateTransform Angle="0" />
+                                        </TransformGroup>
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                            </Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Fill">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RadialMenuNavigationButtonBackgroundBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Children[0].ScaleX" Storyboard.TargetName="BackgroundGlyph" To="1.3" Duration="0:0:0.2" />
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Children[0].ScaleY" Storyboard.TargetName="BackgroundGlyph" To="1.3" Duration="0:0:0.2" />
+                                            <DoubleAnimation Storyboard.TargetName="NormalGlyph" Storyboard.TargetProperty="RenderTransform.Children[0].ScaleX" To="1.1" Duration="0:0:0.05" />
+                                            <DoubleAnimation Storyboard.TargetName="NormalGlyph" Storyboard.TargetProperty="RenderTransform.Children[0].ScaleY" To="1.1" Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="NormalGlyph" Storyboard.TargetProperty="RenderTransform.Children[0].ScaleX" To="0.9" Duration="0:0:0.05" />
+                                            <DoubleAnimation Storyboard.TargetName="NormalGlyph" Storyboard.TargetProperty="RenderTransform.Children[0].ScaleY" To="0.9" Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="telerik:RadRadialMenuItem">
+            <Setter Property="UseLayoutRounding" Value="True" />
+            <Setter Property="BorderBrush" Value="White" />
+            <Setter Property="Background" Value="{StaticResource MenuItemBackground}" />
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="telerik:RadRadialMenuItem">
+                        <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition From="Opening" GeneratedDuration="0:0:0.28" To="*" />
+                                        <VisualTransition From="MouseOver" To="Normal">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="BackgroundGlyph" To="1" Duration="0:0:0.2" />
+                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="BackgroundGlyph" To="1" Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </VisualTransition>
+                                    </VisualStateGroup.Transitions>
+
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="BackgroundGlyph">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RadialMenuNavigationButtonBackgroundBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="BackgroundGlyph" To="1.3" Duration="0:0:0.2" />
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="BackgroundGlyph" To="1.3" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Opening">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="BackgroundGlyph">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.4" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="BackgroundGlyph">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.4" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimation Storyboard.TargetName="BackgroundGlyph" From="1" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.4" />
+                                            <DoubleAnimation Storyboard.TargetName="IconPresenter" From="1" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.4" />
+
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="IconPresenter">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.4" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="IconPresenter">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.4" />
+                                            </DoubleAnimationUsingKeyFrames>
+
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Ellipse x:Name="BackgroundGlyph"
+                                    Fill="{TemplateBinding Background}"
+                                    RenderTransformOrigin=".5,.5"
+                                    Stroke="{TemplateBinding BorderBrush}"
+                                    StrokeThickness="2"
+                                    Width="{TemplateBinding Width}"
+                                    Height="{TemplateBinding Height}">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="0" />
+                                        <TranslateTransform Y="0" X="0" />
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <ContentControl x:Name="IconPresenter"
+                                            VerticalAlignment="Center"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            UseLayoutRounding="True" 
+                                            RenderTransformOrigin="0.5,0.5"
+                                            HorizontalAlignment="Center"
+                                            Content="{TemplateBinding IconContent}">
+                                <ContentControl.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="0" />
+                                        <TranslateTransform Y="0" X="0" />
+                                    </TransformGroup>
+                                </ContentControl.RenderTransform>
+                            </ContentControl>
+                        </Grid>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Width="562" Height="412">
+        <Rectangle RadiusX="2" RadiusY="2" Fill="WhiteSmoke" Margin="1">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Color="#FF5D7183" Opacity="0.4" />
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Image Source="/_03RadialMenu;component/Images/Customization/bgrTop.png" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -70 20 0" />
+
+        <Border Width="560" Height="410" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#99E6E6E6" CornerRadius="5">
+            <Grid>
+
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <telerik:RadTransitionControl x:Name="radTransitionControl" Duration="0:0:0.8" Width="500" HorizontalAlignment="Right">
+                        <telerik:RadTransitionControl.Transition>
+                            <telerik:FadeTransition />
+                        </telerik:RadTransitionControl.Transition>
+                        <telerik:RadTransitionControl.ContentTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}" VerticalAlignment="Top" Stretch="UniformToFill" Height="360" Width="500" Margin="2" />
+                            </DataTemplate>
+                        </telerik:RadTransitionControl.ContentTemplate>
+                    </telerik:RadTransitionControl>
+
+                    <telerik:RadRadialMenu InnerRadiusFactor="0.3" Width="355" Height="355" VerticalAlignment="Center" 
+                               Margin="-175 0 0 0" StartAngle="270" HorizontalAlignment="Left">
+                        <telerik:RadRadialMenuItem CanUserSelect="False" Tag="image1" Command="{Binding ImageTransitionCommand}" CommandParameter="1">
+                            <telerik:RadRadialMenuItem.IconContent>
+                                <Path Data="F1M36,30C36,31.6 34.6,33 33,33L15,33C13.3,33 12,31.6 12,30L36,30zM15,25L15,15L31,15C33.7,15 36,17.2 36,20C36,22.7 33.7,25 31,25C31,26.6 29.6,29 28,29L18,29C16.3,29 15,26.6 15,25zM31,23C32.6,23 34,21.6 34,20C34,18.3 32.6,17 31,17L31,23z"
+                                  Fill="White" HorizontalAlignment="Center" Height="12" Margin="0" Stretch="Fill" StrokeThickness="2" VerticalAlignment="Center" 
+                                  Width="16" />
+                            </telerik:RadRadialMenuItem.IconContent>
+                        </telerik:RadRadialMenuItem>
+                        <telerik:RadRadialMenuItem CanUserSelect="False" Tag="image2" Command="{Binding ImageTransitionCommand}" CommandParameter="2">
+                            <telerik:RadRadialMenuItem.IconContent>
+                                <Path Data="F1M18,37.7L15,18.7L33,18.7L30,37.7L18,37.7zM17.7,23L18.7,29L29.2,29L30.2,23L17.7,23zM14,17.3L14.5,15.8L15.5,15.8L16,14.8L17.5,14.8L18,12.0L30,12.0L30.5,14.8L32,14.8L32.5,15.8L33.5,15.8L34,17.3L14,17.3zM24,14.0C22.8,14.0 22,14.7 22,15.0C22,15.3 22.8,15.8 24,15.8C25.1,15.8 26,15.3 26,15.0C26,14.7 25.1,14.0 24,14.0z" 
+                               HorizontalAlignment="Left" Height="17" Stretch="Fill" VerticalAlignment="Bottom" Width="13" Fill="White" />
+                            </telerik:RadRadialMenuItem.IconContent>
+                        </telerik:RadRadialMenuItem>
+                        <telerik:RadRadialMenuItem CanUserSelect="False" Command="{Binding ImageTransitionCommand}" CommandParameter="3">
+                            <telerik:RadRadialMenuItem.IconContent>
+                                <Path Data="M1.3,10.4L15.0,10.4L13.0,17.3L3.4,17.3zM8.2,0C8.2,0 11.5,1.9 12.9,2.0L12.9,2.0L13.0,2.0C13.7,2.0 14.3,2.6 14.3,3.4C14.3,3.6 14.3,3.8 14.2,4.0L14.1,4.1L14.3,4.1C15.1,4.1 15.7,4.7 15.7,5.4C15.7,5.8 15.5,6.1 15.3,6.4L15.2,6.5L15.3,6.5C15.9,6.6 16.4,7.2 16.4,8.0C16.4,8.8 15.8,9.5 15.0,9.5L1.3,9.5C0.6,9.5 0,8.8 0,8.0C0,7.2 0.4,6.6 1.0,6.5L1.1,6.5L1.0,6.4C0.8,6.1 0.6,5.8 0.6,5.4C0.6,4.7 1.2,4.1 2.0,4.1L2.2,4.1L2.2,4.0C2.1,3.8 2.0,3.6 2.0,3.4C2.0,2.6 2.6,2.0 3.4,2.0L3.4,2.0L3.5,2.0C5.5,1.9 8.2,0 8.2,0z" Fill="White" Height="16" Stretch="Fill" Width="15" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </telerik:RadRadialMenuItem.IconContent>
+                        </telerik:RadRadialMenuItem>
+                        <telerik:RadRadialMenuItem CanUserSelect="False" Command="{Binding ImageTransitionCommand}" CommandParameter="4">
+                            <telerik:RadRadialMenuItem.IconContent>
+                                <Path Data="F1M26,31C29.3,32 31,33 34,33C35,33 35,33.4 35,34C35,34.5 34.5,35 34,35L14,35C13.4,35 13,34.5 13,34C13,33.4 13,33 14,33C17,33 18.6,32 22,31L22,24L14,13L34,13L26,24L26,31zM25.5,17C24.6,17 24,17.6 24,18.5C24,19.3 24.6,20 25.5,20C26.3,20 27,19.3 27,18.5C27,17.6 26.3,17 25.5,17z" Fill="White" Height="14" Stretch="Fill" Width="14" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                            </telerik:RadRadialMenuItem.IconContent>
+                        </telerik:RadRadialMenuItem>
+                    </telerik:RadRadialMenu>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+
+</Window>
